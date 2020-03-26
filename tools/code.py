@@ -1,5 +1,11 @@
 import uuid
 import random
+import hashlib
+import datetime
+
+import jwt
+
+from flask import current_app
 
 
 def generate_uuid():
@@ -24,7 +30,57 @@ def generate_digital_code():
     return code
 
 
+def generate_md5(orl):
+    return hashlib.md5(orl.encode()).hexdigest()
+
+
+def encode_auth_token(user_id):
+    """
+    Generates the Auth Token
+    :return: string
+    """
+    secret_key = current_app.config.get("SECRET_KEY")
+    try:
+        payload = {
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
+            "iat": datetime.datetime.utcnow() - datetime.timedelta(seconds=60),
+            "sub": str(user_id)
+        }
+        return jwt.encode(
+            payload,
+            secret_key,
+            algorithm="HS256"
+        ).decode()
+    except Exception as e:
+        return e
+
+
+def decode_auth_token(auth_token):
+    """
+    Validates the gos_api token
+    :param auth_token:
+    :return: integer|string
+    """
+    secret_key = current_app.config.get("SECRET_KEY")
+    try:
+        payload = jwt.decode(auth_token, secret_key)
+        user_id = payload["sub"]
+        jwt.encode(
+            payload,
+            secret_key,
+            algorithm="HS256"
+        )
+        return user_id
+    except jwt.ExpiredSignatureError:
+        print("Signature expired. Please log in again.")
+        return None
+    except jwt.InvalidTokenError:
+        print("Invalid token. Please log in again.")
+        return None
+
+
 if __name__ == '__main__':
     print(generate_uuid())
     print(generate_verification_code())
     print(generate_digital_code())
+    print(generate_md5("111"))

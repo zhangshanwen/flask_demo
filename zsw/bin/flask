@@ -1,4 +1,4 @@
-#!/Users/edz/Desktop/python_code/login_mod/zsw/bin/python
+#!/Users/edz/Desktop/python_code/flask_demo/zsw/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -1,4 +1,4 @@
-#!/Users/edz/Desktop/python_code/login_mod/zsw/bin/python
+#!/Users/edz/Desktop/python_code/flask_demo/zsw/bin/python
 # EASY-INSTALL-ENTRY-SCRIPT: 'setuptools==40.8.0','console_scripts','easy_install'
 __requires__ = 'setuptools==40.8.0'
 import re

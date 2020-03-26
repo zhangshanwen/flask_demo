@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/edz/Desktop/python_code/login_mod/zsw"
+VIRTUAL_ENV="/Users/edz/Desktop/python_code/flask_demo/zsw"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/edz/Desktop/python_code/login_mod/zsw"
+set -gx VIRTUAL_ENV "/Users/edz/Desktop/python_code/flask_demo/zsw"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
