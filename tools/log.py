@@ -1,7 +1,7 @@
 import logging
 
 # 创建一个logger
-logger = logging.getLogger('flask')
+logger = logging.getLogger('flask_demo')
 logger_sql = logging.getLogger('sqlalchemy.engine')
 
 logger.setLevel(logging.DEBUG)

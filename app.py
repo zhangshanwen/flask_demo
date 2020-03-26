@@ -1,4 +1,7 @@
+from tools.log import logger
+
 from controller import app
 
 if __name__ == '__main__':
-    app.run()
+    logger.info("app is starting ......")
+    app.run(port=5000)

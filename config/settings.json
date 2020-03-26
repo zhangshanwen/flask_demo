@@ -1,6 +1,8 @@
 {
   "DEBUG": true,
+  "TESTING":true,
   "SALT": "demo_salt",
+  "ENV":"development",
   "SECRET_KEY": "demo_secret_key",
   "REDIS": {
     "host": "127.0.0.1",
