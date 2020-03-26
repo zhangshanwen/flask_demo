@@ -1,5 +1,7 @@
 from flask import request, current_app
 
+from sqlalchemy import or_
+
 from . import login
 import enums
 from controller.common import check_request
@@ -38,8 +40,25 @@ def register():
     #     return render_failed("", enums.sms_code_valid)
     # if ts_code.decode() != sms_code:
     #     return render_failed("", enums.sms_code_err)
-    u = User(user_name=user_name, mobile=mobile,
-             password=code.generate_md5(current_app.config.get("SALT") + password))
-    session.add(u)
+    exist_user = session.query(User).filter(User.mobile == mobile).one()
+    if exist_user:
+        return render_failed("",enums.mobile_exist)
+    user = User(user_name=user_name, mobile=mobile,
+                password=code.generate_md5(current_app.config.get("SALT") + password))
+    session.add(user)
     session.commit()
-    return render_success({"X-AUTH-TOKEN": code.encode_auth_token(u.id)})
+    return render_success({"X-AUTH-TOKEN": code.encode_auth_token(user.id)})
+
+
+@login.route("/api/user/login", methods=["POST"])
+@check_request
+def login():
+    key = request.json.get("key")
+    password = request.json.get("password")
+    if not all([key, password]):
+        return render_failed("", enums.param_err)
+    user = session.query(User).filter(or_(User.mobile == key, User.user_name == key), User.password ==
+                                      code.generate_md5(current_app.config.get("SALT") + password)).one()
+    if not user:
+        return render_failed("", enums.account_password_error)
+    return render_success({"X-AUTH-TOKEN": code.encode_auth_token(user.id)})

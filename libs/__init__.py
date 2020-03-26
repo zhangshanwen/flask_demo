@@ -21,7 +21,7 @@ mysql_url = 'mysql+mysqlconnector://{}:{}@{}:{}/{}'.format(mysql_json.get("user"
                                                            mysql_json.get("host"), mysql_json.get("port"),
                                                            mysql_json.get("database"))
 # 初始化数据库连接:
-engine = create_engine(mysql_url, encoding="utf-8")
+engine = create_engine(mysql_url, encoding="utf-8", echo=True)
 # 创建DBSession类型:
 DBSession = sessionmaker(bind=engine)
 
