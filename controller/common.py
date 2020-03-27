@@ -1,7 +1,6 @@
 import functools
 
 from flask import request
-
 from tools import render, log
 
 

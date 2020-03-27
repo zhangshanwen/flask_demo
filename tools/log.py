@@ -1,8 +1,9 @@
 import logging
 
 # 创建一个logger
-logger = logging.getLogger('flask_demo')
-logger_sql = logging.getLogger('sqlalchemy.engine')
+logger = logging.getLogger('flask_demo')             # 记录app日志到文件
+logger_sql = logging.getLogger('sqlalchemy.engine')  # 记录sql 到文件
+logger_werkzeug = logging.getLogger('werkzeug')   # 记录werkzeug 日志输出到文件
 
 logger.setLevel(logging.DEBUG)
 
@@ -24,3 +25,4 @@ logger.addHandler(fh)
 logger.addHandler(ch)
 # 给logger添加handler
 logger_sql.addHandler(fh)
+logger_werkzeug.addHandler(fh)

@@ -17,3 +17,8 @@ if you watch "ImportError: No module named 'mysql'
 - create script ``python manage.py script "add_user_table"``
 - upgrade ```python manage.py upgrade```
 - downgrade ```python manage.py downgrade```
+
+# docker
+docker build  -t flak_demo . --no-cache
+docker run -d — name flak_demo -p 5000:5000 flak_demo:latest
+
