@@ -40,9 +40,9 @@ def register():
     #     return render_failed("", enums.sms_code_valid)
     # if ts_code.decode() != sms_code:
     #     return render_failed("", enums.sms_code_err)
-    exist_user = session.query(User).filter(User.mobile == mobile).one()
+    exist_user = session.query(User).filter(User.mobile == mobile).first()
     if exist_user:
-        return render_failed("",enums.mobile_exist)
+        return render_failed("", enums.mobile_exist)
     user = User(user_name=user_name, mobile=mobile,
                 password=code.generate_md5(current_app.config.get("SALT") + password))
     session.add(user)
@@ -58,7 +58,7 @@ def login():
     if not all([key, password]):
         return render_failed("", enums.param_err)
     user = session.query(User).filter(or_(User.mobile == key, User.user_name == key), User.password ==
-                                      code.generate_md5(current_app.config.get("SALT") + password)).one()
+                                      code.generate_md5(current_app.config.get("SALT") + password)).first()
     if not user:
         return render_failed("", enums.account_password_error)
     return render_success({"X-AUTH-TOKEN": code.encode_auth_token(user.id)})

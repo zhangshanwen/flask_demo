@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, INT, Integer, MetaData, Table
+from sqlalchemy import Column, String, INT
 
 # 创建对象的基类:
 Base = declarative_base()

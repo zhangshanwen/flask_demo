@@ -1,4 +1,3 @@
-import os
 
 from tools.log import logger
 

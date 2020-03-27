@@ -5,7 +5,7 @@ meta = MetaData()
 user = Table(
     "user", meta,
     Column('id', Integer, primary_key=True),
-    Column('user', String(40)),
+    Column('user_name', String(40)),
     Column('mobile', String(40)),
     Column('password', String(40)),
 )
