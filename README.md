@@ -2,10 +2,8 @@
 
 flask demo 
 
-export FLASK_DEMO_SETTINGS=./config/settings.cfg
-
-if you watch "ImportError: No module named 'mysql'
-" ,you can "pip install mysql-connector" and restart you application
+if you met "ImportError: No module named 'mysql'
+" ,you can try "pip install mysql-connector" and restart you application
 
 # migration
 ## https://sqlalchemy-migrate.readthedocs.io/en/latest/versioning.html
