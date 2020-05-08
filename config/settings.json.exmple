@@ -2,6 +2,7 @@
   "DEBUG": true,
   "TESTING":true,
   "SALT": "demo_salt",
+  "LOG_PATH": "./logs",
   "ENV":"development",
   "SECRET_KEY": "demo_secret_key",
   "REDIS": {

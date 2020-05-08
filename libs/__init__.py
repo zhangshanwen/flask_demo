@@ -3,7 +3,7 @@ import redis
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from flask import current_app
-from tools.log import logger
+from tools.log import AppLog
 
 pool = redis.ConnectionPool()
 redis_json = current_app.config.get("REDIS")
@@ -18,7 +18,7 @@ mysql_json = current_app.config.get("MYSQL")
 if not mysql_json:
     raise ConnectionError("config error")
 
-logger.info(mysql_json.get("url"))
+AppLog.init_log(current_app.config.get("LOG_PATH"))
 # 初始化数据库连接:
 engine = create_engine(mysql_json.get("url"), encoding="utf-8", echo=True)
 # 创建DBSession类型:

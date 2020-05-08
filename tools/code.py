@@ -2,7 +2,7 @@ import uuid
 import random
 import hashlib
 import datetime
-
+import logging
 import jwt
 
 from flask import current_app
@@ -34,6 +34,14 @@ def generate_md5(orl):
     return hashlib.md5(orl.encode()).hexdigest()
 
 
+def sha256(orl):
+    return hashlib.sha256(orl.encode()).hexdigest()
+
+
+def double_sha256(orl):
+    return sha256(sha256(orl))
+
+
 def encode_auth_token(user_id):
     """
     Generates the Auth Token
@@ -52,6 +60,7 @@ def encode_auth_token(user_id):
             algorithm="HS256"
         ).decode()
     except Exception as e:
+        logging.info(e)
         return e
 
 
@@ -72,10 +81,10 @@ def decode_auth_token(auth_token):
         )
         return user_id
     except jwt.ExpiredSignatureError:
-        print("Signature expired. Please log in again.")
+        logging.info("Signature expired. Please log in again.")
         return None
     except jwt.InvalidTokenError:
-        print("Invalid token. Please log in again.")
+        logging.info("Invalid token. Please log in again.")
         return None
 
 
@@ -84,3 +93,5 @@ if __name__ == '__main__':
     print(generate_verification_code())
     print(generate_digital_code())
     print(generate_md5("111"))
+    print(sha256("131313131"))
+    print(double_sha256("131313131"))
