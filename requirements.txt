@@ -2,7 +2,7 @@ click==7.1.1
 decorator==4.4.2
 Flask==1.1.1
 itsdangerous==1.1.0
-Jinja2==2.11.1
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 mysql-connector==2.2.9
 pbr==5.4.4
