@@ -21,10 +21,10 @@ def user_view():
     #     return render_failed("", enums.sms_code_valid)
     # if ts_code.decode() != sms_code:
     #     return render_failed("", enums.sms_code_err)
-    exist_user = db.query(User).filter(User.mobile == mobile).first()
+    exist_user = db.query(User).filter(User.mobile == mobile).count()
     if exist_user:
         return render_failed("", enums.mobile_exist)
-    exist_user = db.query(User).filter(User.user_name == user_name).first()
+    exist_user = db.query(User).filter(User.user_name == user_name).count()
     if exist_user:
         return render_failed("", enums.username_exist)
     user = User(user_name=user_name, mobile=mobile,

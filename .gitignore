@@ -2,8 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-zsw/
-./config/settings.json
+config/*.json
 
 # C extensions
 *.so

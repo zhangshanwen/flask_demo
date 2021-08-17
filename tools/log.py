@@ -13,7 +13,8 @@ class AppLog:
         logging.basicConfig(
             level=logging.DEBUG,
             format=formatter,
-            datefmt='%a, %d %b %Y %H:%M:%S',
+            # datefmt='%a, %d %b %Y %H:%M:%S',
+            datefmt='%Y-%m-%d %H:%M:%S',
         )
         handler = TimedRotatingFileHandler(path + '/flask.log', when="d",
                                            backupCount=7)
