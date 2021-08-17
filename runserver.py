@@ -4,4 +4,4 @@ import libs
 
 if __name__ == '__main__':
     logging.info("app is starting ......")
-    app.run(port=5000)
+    app.run(port=app.config.get("PORT"))

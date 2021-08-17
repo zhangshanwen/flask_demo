@@ -1,9 +1,10 @@
 {
   "DEBUG": true,
-  "TESTING":true,
+  "PORT": 5000,
+  "TESTING": true,
   "SALT": "demo_salt",
   "LOG_PATH": "./logs",
-  "ENV":"development",
+  "ENV": "development",
   "SECRET_KEY": "demo_secret_key",
   "REDIS": {
     "host": "127.0.0.1",
@@ -11,6 +12,6 @@
     "db": 0
   },
   "MYSQL": {
-    "url":"mysql+mysqlconnector://root:123456@127.0.0.1:3306/ya"
+    "url": "mysql+mysqlconnector://root:123456@127.0.0.1:3306/ya"
   }
 }
