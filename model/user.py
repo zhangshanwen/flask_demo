@@ -1,7 +1,7 @@
-from sqlalchemy.ext.declarative import declarative_base
+import time
 from sqlalchemy import Column, String, INT
+from sqlalchemy.ext.declarative import declarative_base
 
-# 创建对象的基类:
 Base = declarative_base()
 
 
@@ -15,4 +15,5 @@ class User(Base):
     user_name = Column(String(), )
     mobile = Column(String(), )
     password = Column(String(), )
-
+    created_time = Column(INT(), default=int(time.time()))
+    updated_time = Column(INT(), default=int(time.time()), onupdate=int(time.time()))

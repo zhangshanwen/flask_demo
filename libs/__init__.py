@@ -25,4 +25,4 @@ engine = create_engine(mysql_json.get("url"), encoding="utf-8", echo=True)
 DBSession = sessionmaker(bind=engine)
 
 # 创建session对象:
-session = DBSession()
+db = DBSession()

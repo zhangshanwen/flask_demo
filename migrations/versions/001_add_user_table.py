@@ -8,6 +8,9 @@ user = Table(
     Column('user_name', String(40)),
     Column('mobile', String(40)),
     Column('password', String(40)),
+    Column('created_time', Integer),
+    Column('updated_time', Integer),
+
 )
 
 

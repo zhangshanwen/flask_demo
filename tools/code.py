@@ -47,7 +47,10 @@ def encode_auth_token(user_id):
     Generates the Auth Token
     :return: string
     """
-    secret_key = current_app.config.get("SECRET_KEY")
+    if current_app:
+        secret_key = current_app.config.get("SECRET_KEY")
+    else:
+        secret_key = "1123131"
     try:
         payload = {
             "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
@@ -58,7 +61,7 @@ def encode_auth_token(user_id):
             payload,
             secret_key,
             algorithm="HS256"
-        ).decode()
+        )
     except Exception as e:
         logging.info(e)
         return e
@@ -70,15 +73,13 @@ def decode_auth_token(auth_token):
     :param auth_token:
     :return: integer|string
     """
-    secret_key = current_app.config.get("SECRET_KEY")
+    if current_app:
+        secret_key = current_app.config.get("SECRET_KEY")
+    else:
+        secret_key = "1123131"
     try:
-        payload = jwt.decode(auth_token, secret_key)
+        payload = jwt.decode(auth_token, secret_key, algorithms=["HS256"])
         user_id = payload["sub"]
-        jwt.encode(
-            payload,
-            secret_key,
-            algorithm="HS256"
-        )
         return user_id
     except jwt.ExpiredSignatureError:
         logging.info("Signature expired. Please log in again.")
@@ -95,3 +96,4 @@ if __name__ == '__main__':
     print(generate_md5("111"))
     print(sha256("131313131"))
     print(double_sha256("131313131"))
+    print(encode_auth_token(1))
