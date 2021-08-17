@@ -1,10 +1,10 @@
 from flask import request, current_app
+from flask.views import MethodView
 
 from sqlalchemy import or_
 
 from . import login
 import enums
-from controller.common import check_request
 from tools.render import render_failed, render_success
 from tools import sms, code
 from libs import ts, session
@@ -12,7 +12,6 @@ from model.user import User
 
 
 @login.route("/api/sms", methods=["POST"])
-@check_request
 def sms():
     # sms_key: sms_key  register/login/reset password
     mobile = request.json.get("mobile")
@@ -27,7 +26,6 @@ def sms():
 
 
 @login.route("/api/user/register", methods=["POST"])
-@check_request
 def register():
     user_name = request.json.get("user_name")
     password = request.json.get("password")
@@ -51,7 +49,6 @@ def register():
 
 
 @login.route("/api/user/login", methods=["POST"])
-@check_request
 def login():
     key = request.json.get("key")
     password = request.json.get("password")

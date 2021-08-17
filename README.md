@@ -1,6 +1,11 @@
 # flask_demo
 
+
 flask demo 
+
+```
+cp config/settings.json.exmple  config/settings.json
+```
 
 if you met "ImportError: No module named 'mysql'
 " ,you can try "pip install mysql-connector" and restart you application
