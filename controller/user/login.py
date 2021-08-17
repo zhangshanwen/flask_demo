@@ -1,5 +1,5 @@
+import time
 from flask import request, current_app, session
-
 from sqlalchemy import or_
 
 from . import login_bp
@@ -20,8 +20,11 @@ def login_view():
                                  code.generate_md5(current_app.config.get("SALT") + password)).first()
     if not user:
         return render_failed("", enums.account_password_error)
+    user.last_login_time = int(time.time())
+    db.commit()
     session[str(user.id)] = {
         "user_name": user.user_name,
-        "mobile": user.mobile
+        "mobile": user.mobile,
+        "last_login_time": user.last_login_time
     }
     return render_success({"Authorization": code.encode_auth_token(user.id)})
