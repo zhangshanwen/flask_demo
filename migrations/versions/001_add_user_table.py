@@ -10,6 +10,7 @@ user = Table(
     Column('password', String(40)),
     Column('created_time', Integer),
     Column('updated_time', Integer),
+    Column('last_login_time', Integer),
 
 )
 

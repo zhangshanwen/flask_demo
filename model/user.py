@@ -15,5 +15,6 @@ class User(Base):
     user_name = Column(String(), )
     mobile = Column(String(), )
     password = Column(String(), )
+    last_login_time = Column(INT(), default=0)
     created_time = Column(INT(), default=int(time.time()))
     updated_time = Column(INT(), default=int(time.time()), onupdate=int(time.time()))

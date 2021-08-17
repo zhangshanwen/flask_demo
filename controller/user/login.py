@@ -22,9 +22,9 @@ def login_view():
         return render_failed("", enums.account_password_error)
     user.last_login_time = int(time.time())
     db.commit()
-    session[str(user.id)] = {
-        "user_name": user.user_name,
-        "mobile": user.mobile,
-        "last_login_time": user.last_login_time
-    }
-    return render_success({"Authorization": code.encode_auth_token(user.id)})
+    res = {"user_name": user.user_name, "mobile": user.mobile, "last_login_time": user.last_login_time}
+    session[str(user.id)] = res
+    res.update({
+        "Authorization": code.encode_auth_token(user.id)
+    })
+    return render_success(res)
