@@ -20,7 +20,10 @@ if not mysql_json:
 
 AppLog.init_log(current_app.config.get("LOG_PATH"))
 # 初始化数据库连接:
-engine = create_engine(mysql_json.get("url"), encoding="utf-8", echo=True)
+db_url = "mysql+mysqlconnector://{user}:{password}@{host}:{port}/{dbname}"
+db_url = db_url.format(user=mysql_json.get("user"), password=mysql_json.get("password"), host=mysql_json.get("host"),
+                       port=mysql_json.get("port"), dbname=mysql_json.get("dbname"))
+engine = create_engine(db_url, encoding="utf-8", echo=True)
 # 创建DBSession类型:
 DBSession = sessionmaker(bind=engine)
 

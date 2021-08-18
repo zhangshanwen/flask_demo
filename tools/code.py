@@ -7,6 +7,8 @@ import jwt
 
 from flask import current_app
 
+default_secret_key = "123456"
+
 
 def generate_uuid():
     return str(uuid.uuid4()).replace("-", "")
@@ -50,10 +52,11 @@ def encode_auth_token(user_id):
     if current_app:
         secret_key = current_app.config.get("SECRET_KEY")
     else:
-        secret_key = "1123131"
+        secret_key = default_secret_key
     try:
         payload = {
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=30),
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(
+                days=current_app.config.get("JWT", {}).get("expired_at", 30)),
             "iat": datetime.datetime.utcnow() - datetime.timedelta(seconds=60),
             "sub": str(user_id)
         }
@@ -76,7 +79,7 @@ def decode_auth_token(auth_token):
     if current_app:
         secret_key = current_app.config.get("SECRET_KEY")
     else:
-        secret_key = "1123131"
+        secret_key = default_secret_key
     try:
         payload = jwt.decode(auth_token, secret_key, algorithms=["HS256"])
         user_id = payload["sub"]
