@@ -10,10 +10,7 @@ from model.user import User
 
 @users_bp.route("/api/users", methods=["GET"])
 def users_view():
-    if request.method == "GET":
-        return get_users()
-    else:
-        return get_users()
+    return get_users()
 
 
 def get_users():
@@ -25,7 +22,8 @@ def get_users():
     data = {
         "list": [{
             "id": i.id, "user_name": i.user_name, "mobile": i.mobile,
-            "created_time": i.created_time, "updated_time": i.created_time,
+            "last_login_time": i.last_login_time,
+            "created_time": i.created_time, "updated_time": i.updated_time,
         } for i in res],
         "pagination": {
             "page": page,
