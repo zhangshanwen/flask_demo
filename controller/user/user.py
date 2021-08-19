@@ -1,6 +1,6 @@
 import time
 
-from flask import request, current_app, session
+from flask import request, current_app, session, g
 
 from . import login_bp, users_bp
 import enums
@@ -93,3 +93,29 @@ def user_reset_password(user_id):
         session.pop(str(user_id))
     return render_success()
 
+
+@users_bp.route("/api/user/password", methods=["PUT"])
+def user_update_password():
+    password = request.json.get("password")
+    if not password:
+        return render_failed("", enums.param_err)
+    user = g.get(enums.current_user)
+    password = code.generate_md5(current_app.config.get("SALT") + password)
+    if user.get("password") == password:
+        return render_failed("", enums.password_not_the_same)
+    db.query(User).filter(User.id == user.get("id")).update(
+        {
+            User.password: password
+        })
+    db.commit()
+    if str(user.get("id")) in session.keys():
+        session.pop(str(user.get("id")))
+    return render_success()
+
+
+@users_bp.route("/api/user/logout", methods=["DELETE"])
+def logout():
+    user = g.get(enums.current_user)
+    if str(user.get("id")) in session.keys():
+        session.pop(str(user.get("id")))
+    return render_success()

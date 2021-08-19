@@ -1,6 +1,6 @@
 import logging
 
-from flask import request, session
+from flask import request, session, g
 import enums
 from tools import render
 from tools.code import decode_auth_token
@@ -17,3 +17,4 @@ def jwt_request():
     user = session.get(str(user_id))
     if not user:
         return render.render_failed(msg=enums.auth_invalid, status_code=401)
+    setattr(g, enums.current_user, user)
