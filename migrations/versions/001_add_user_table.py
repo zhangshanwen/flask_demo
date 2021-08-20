@@ -1,4 +1,9 @@
+import time
+
 from sqlalchemy import Table, Column, Integer, String, MetaData
+
+from tools.code import generate_md5
+from manage import config
 
 meta = MetaData()
 
@@ -18,6 +23,10 @@ user = Table(
 def upgrade(migrate_engine):
     meta.bind = migrate_engine
     user.create()
+    res = user.insert().values(user_name=config.get("DEFAULT_USERNAME"), mobile=config.get("DEFAULT_MOBILE"),
+                               password=generate_md5(config.get("SALT") + config.get("DEFAULT_PASSWORD")),
+                               created_time=int(time.time()))
+    migrate_engine.execute(res)
 
 
 def downgrade(migrate_engine):
