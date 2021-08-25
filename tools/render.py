@@ -36,9 +36,13 @@ def render(status, msg, data):
     return jsonify(result)
 
 
-def render_success(data={}, msg="ok", status_code=200):
+def render_success(data=None, msg="ok", status_code=200):
+    if data is None:
+        data = {}
     return render(1, msg, data), status_code
 
 
-def render_failed(data={}, msg="failed", status_code=400):
+def render_failed(data=None, msg="failed", status_code=400):
+    if data is None:
+        data = {}
     return render(0, msg, data), status_code
