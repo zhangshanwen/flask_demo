@@ -6,12 +6,13 @@ from . import login_bp
 import enums
 from tools.render import render_failed, render_success
 from tools import code
-from libs import ts, db
+from libs import ts, DBSession
 from model.user import User
 
 
 @login_bp.route("/api/user/login", methods=["POST"])
 def login_view():
+    db = DBSession()
     key = request.json.get("key")
     password = request.json.get("password")
     if not all([key, password]):

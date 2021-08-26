@@ -26,6 +26,3 @@ db_url = db_url.format(user=mysql_json.get("user"), password=mysql_json.get("pas
 engine = create_engine(db_url, encoding="utf-8", echo=True)
 # 创建DBSession类型:
 DBSession = sessionmaker(bind=engine)
-
-# 创建session对象:
-db = DBSession()

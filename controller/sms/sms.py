@@ -7,7 +7,7 @@ from . import sms_bp
 import enums
 from tools.render import render_failed, render_success
 from tools import sms, code
-from libs import ts, db
+from libs import ts, DBSession
 
 
 @sms_bp.route("/api/sms", methods=["POST"])
@@ -22,3 +22,4 @@ def sms_view():
     sms_code = code.generate_digital_code()
     ts.setex(mobile + sms_key, sms_code, 120)
     sms.send_msg(mobile, sms_code)
+    return render_success()

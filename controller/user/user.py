@@ -6,12 +6,13 @@ from . import login_bp, users_bp
 import enums
 from tools.render import render_failed, render_success
 from tools import code
-from libs import ts, db
+from libs import ts, DBSession
 from model.user import User
 
 
 @login_bp.route("/api/user", methods=["POST"])
 def register_view():
+    db = DBSession()
     user_name = request.json.get("user_name")
     password = request.json.get("password")
     mobile = request.json.get("mobile")
@@ -45,6 +46,7 @@ def user_view(user_id):
 
 
 def user_edit(user_id):
+    db = DBSession()
     user_name = request.json.get("user_name")
     mobile = request.json.get("mobile")
     if not all([user_name, mobile]):
@@ -72,6 +74,7 @@ def user_edit(user_id):
 
 
 def user_delete(user_id):
+    db = DBSession()
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         return render_failed("", enums.error_id)
@@ -84,6 +87,7 @@ def user_delete(user_id):
 
 @users_bp.route("/api/user/password/reset/<user_id>", methods=["GET"])
 def user_reset_password(user_id):
+    db = DBSession()
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         return render_failed("", enums.error_id)
@@ -96,6 +100,7 @@ def user_reset_password(user_id):
 
 @users_bp.route("/api/user/password", methods=["PUT"])
 def user_update_password():
+    db = DBSession()
     password = request.json.get("password")
     if not password:
         return render_failed("", enums.param_err)
