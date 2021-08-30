@@ -6,34 +6,32 @@ from . import login_bp, users_bp
 import enums
 from tools.render import render_failed, render_success
 from tools import code
-from libs import ts, DBSession
+from libs.db import Db
 from model.user import User
+from params.user import UserSaveParam, UserEditParam, UserPasswordParam
 
 
 @login_bp.route("/api/user", methods=["POST"])
 def register_view():
-    db = DBSession()
-    user_name = request.json.get("user_name")
-    password = request.json.get("password")
-    mobile = request.json.get("mobile")
-    # sms_code = request.json.get("sms_code")
-    if not all([user_name, password, mobile]):
-        return render_failed("", enums.param_err)
+    db = Db()
+    param = UserSaveParam()
+    if err := param.check_param():
+        return render_failed(msg=err)
     # ts_code = ts.get(enums.register_sms_key + mobile)
     # if not ts_code:
-    #     return render_failed("", enums.sms_code_valid)
+    #     return render_failed(msg= enums.sms_code_valid)
     # if ts_code.decode() != sms_code:
-    #     return render_failed("", enums.sms_code_err)
-    exist_user = db.query(User).filter(User.mobile == mobile).count()
+    #     return render_failed(msg=enums.sms_code_err)
+    exist_user = db.query(User).filter(User.mobile == param.mobile).count()
     if exist_user:
-        return render_failed("", enums.mobile_exist)
-    exist_user = db.query(User).filter(User.user_name == user_name).count()
+        return render_failed(msg=enums.mobile_exist)
+    exist_user = db.query(User).filter(User.user_name == param.user_name).count()
     if exist_user:
-        return render_failed("", enums.username_exist)
-    user = User(user_name=user_name, mobile=mobile,
-                password=code.generate_md5(current_app.config.get("SALT") + password))
-    db.add(user)
-    db.commit()
+        return render_failed(msg=enums.username_exist)
+    param.password = code.generate_md5(current_app.config.get("SALT") + param.password)
+    db.create_one(User, param)
+    if db.err:
+        return render_failed(msg=db.err)
     return render_success()
 
 
@@ -46,40 +44,32 @@ def user_view(user_id):
 
 
 def user_edit(user_id):
-    db = DBSession()
-    user_name = request.json.get("user_name")
-    mobile = request.json.get("mobile")
-    if not all([user_name, mobile]):
-        return render_failed("", enums.param_err)
+    db = Db()
+    param = UserEditParam()
+    if err := param.check_param():
+        return render_failed(msg=err)
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
-        return render_failed("", enums.error_id)
-    exist_user = db.query(User).filter(User.mobile == mobile).filter(User.id != user_id).count()
+        return render_failed(msg=enums.error_id)
+    exist_user = db.query(User).filter(User.mobile == param.mobile).filter(User.id != user_id).count()
     if exist_user:
-        return render_failed("", enums.mobile_exist)
-    exist_user = db.query(User).filter(User.user_name == user_name).filter(User.id != user_id).count()
+        return render_failed(msg=enums.mobile_exist)
+    exist_user = db.query(User).filter(User.user_name == param.user_name).filter(User.id != user_id).count()
     if exist_user:
-        return render_failed("", enums.username_exist)
-    user.user_name = user_name
-    user.mobile = mobile
-    user.updated_time = int(time.time())
-    db.commit()
+        return render_failed(msg=enums.username_exist)
+    db.update_one(User, user_id, param)
+    if db.err:
+        return render_failed(msg=db.err)
     if str(user_id) in session.keys():
         session.pop(str(user_id))
-    return render_success({
-        "id": user.id, "user_name": user.user_name, "mobile": user.mobile,
-        "last_login_time": user.last_login_time,
-        "created_time": user.created_time, "updated_time": user.created_time,
-    })
+    return render_success(db.to_json(ignoreList=["password"]))
 
 
 def user_delete(user_id):
-    db = DBSession()
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        return render_failed("", enums.error_id)
-    db.delete(user)
-    db.commit()
+    db = Db()
+    db.delete_one(User, user_id)
+    if db.err:
+        return render_failed(msg=db.err)
     if str(user_id) in session.keys():
         session.pop(str(user_id))
     return render_success()
@@ -87,32 +77,30 @@ def user_delete(user_id):
 
 @users_bp.route("/api/user/password/reset/<user_id>", methods=["GET"])
 def user_reset_password(user_id):
-    db = DBSession()
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        return render_failed("", enums.error_id)
-    user.password = code.generate_md5(current_app.config.get("SALT") + current_app.config.get("DEFAULT_PASSWORD"))
-    db.commit()
-    if str(user_id) in session.keys():
-        session.pop(str(user_id))
+    db = Db()
+    param = UserPasswordParam()
+    if err := param.check_param():
+        return render_failed(msg=err)
+    param.password = code.generate_md5(current_app.config.get("SALT") + param.password)
+    db.update_one(User, user_id, param)
+    if db.err:
+        return render_failed(msg=db.err)
     return render_success()
 
 
 @users_bp.route("/api/user/password", methods=["PUT"])
 def user_update_password():
-    db = DBSession()
-    password = request.json.get("password")
-    if not password:
-        return render_failed("", enums.param_err)
+    db = Db()
+    param = UserPasswordParam()
+    if err := param.check_param():
+        return render_failed(msg=err)
     user = g.get(enums.current_user)
-    password = code.generate_md5(current_app.config.get("SALT") + password)
-    if user.get("password") == password:
+    param.password = code.generate_md5(current_app.config.get("SALT") + param.password)
+    if user.get("password") == param.password:
         return render_failed("", enums.password_not_the_same)
-    db.query(User).filter(User.id == user.get("id")).update(
-        {
-            User.password: password
-        })
-    db.commit()
+    db.update_one(User, user.get("id"), param)
+    if db.err:
+        return render_failed(msg=db.err)
     if str(user.get("id")) in session.keys():
         session.pop(str(user.get("id")))
     return render_success()

@@ -2,7 +2,10 @@ from time import time
 import logging
 
 from flask import request, jsonify
+from sqlalchemy import desc
+
 from . import code
+from .bind import to_json
 
 default_page = 1
 default_page_size = 20
@@ -10,19 +13,27 @@ default_sort = 0  # 0 desc 1 asc
 default_order = "id"
 
 
-def get_page():
-    try:
-        page = int(request.args.get("page", default_page))
-        page_size = int(request.args.get("page_size", default_page_size))
-        sort = int(request.args.get("sort", default_sort))
-        order = request.args.get("order", default_order)
-    except Exception as e:
-        logging.error(e)
-        page = default_page
-        page_size = default_page_size
-        sort = default_sort
-        order = default_order
-    return page, page_size, (page - 1) * page_size, sort, order
+class Pagination:
+    def __init__(self):
+        try:
+            self.page = int(request.args.get("page", default_page))
+            self.page_size = int(request.args.get("page_size", default_page_size))
+            self.sort = int(request.args.get("sort", default_sort))
+            self.order = request.args.get("order", default_order)
+        except Exception as e:
+            logging.error(e)
+            self.page = default_page
+            self.page_size = default_page_size
+            self.sort = default_sort
+            self.order = default_order
+        if self.sort:
+            self.order_by = desc(self.order)
+        else:
+            self.order_by = self.order
+        self.offset = (self.page - 1) * self.page_size
+
+    def to_dict(self):
+        return to_json(self, ignoreList=["order_by", "offset"])
 
 
 def render(status, msg, data):
