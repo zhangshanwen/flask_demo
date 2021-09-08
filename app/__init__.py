@@ -1,4 +1,4 @@
-from flask import Flask, url_for
+from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 from .register import register
 from middleware.handel import base_request
@@ -7,7 +7,6 @@ from middleware.handel import base_request
 app = Flask("flask_demo")
 # init settings
 app.config.from_json("config/settings.json")
-
 # init wsgi middleware
 app.wsgi_app = ProxyFix(app.wsgi_app)
 # create an app context

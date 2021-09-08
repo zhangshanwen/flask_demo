@@ -1,5 +1,3 @@
-import logging
-
 from flask import request
 
 from tools import render
