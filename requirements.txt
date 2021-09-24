@@ -1,6 +1,6 @@
 attrs==21.2.0
 click==8.0.1
-decorator==5.0.9
+decorator==5.1.0
 Flask==2.0.1
 greenlet==1.1.1
 itsdangerous==2.0.1
@@ -12,8 +12,8 @@ pbr==5.6.0
 PyJWT==2.1.0
 redis==3.5.3
 six==1.16.0
-SQLAlchemy==1.4.22
+SQLAlchemy==1.4.25
 sqlalchemy-migrate==0.13.0
-sqlparse==0.4.1
+sqlparse==0.4.2
 Tempita==0.5.2
 Werkzeug==2.0.1
