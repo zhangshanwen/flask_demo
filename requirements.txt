@@ -9,7 +9,7 @@ MarkupSafe==2.0.1
 multidict==5.1.0
 mysql-connector==2.2.9
 pbr==5.6.0
-PyJWT==2.1.0
+PyJWT==2.4.0
 redis==3.5.3
 six==1.16.0
 SQLAlchemy==1.4.25
