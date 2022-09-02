@@ -23,19 +23,19 @@ def set_params(params, args):
 
 
 def bind_param(params):
-    if request.method in ["POST", "PUT", "PATCH"]:
+    if request.method.upper() in ["POST", "PUT", "PATCH"]:
         return set_params(params, request.json)
     return set_params(params, request.args)
 
 
-def to_json(ormObject, needList: list = None, ignoreList: list = None) -> dict:
-    items = deepcopy(ormObject.__dict__)
+def to_json(orm_object, need_list: list = None, ignore_list: list = None) -> dict:
+    items = deepcopy(orm_object.__dict__)
     if _sa_instance_state in items:
         items.pop("_sa_instance_state")
-    if needList:
-        items = {k: v for k, v in items.items() if k in needList}
-    elif ignoreList:
-        for ignore in ignoreList:
+    if need_list:
+        items = {k: v for k, v in items.items() if k in need_list}
+    elif ignore_list:
+        for ignore in ignore_list:
             if ignore in items:
                 items.pop(ignore)
     return items
